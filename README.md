@@ -1,5 +1,5 @@
 # MVC Board Practice
-## first Spring Project
+#### first Spring Project
 
 ###### Tomcat 9.0 
 ###### DB : Oracle 11g
@@ -12,3 +12,5 @@
 - 게시물 삭제
 - 게시물 수정
 
+### ver 1.1
+- JdbcTemplate 셋팅

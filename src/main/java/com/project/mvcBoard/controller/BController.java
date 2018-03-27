@@ -2,6 +2,8 @@ package com.project.mvcBoard.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +18,7 @@ import com.project.mvcBoard.command.BModifyCommand;
 import com.project.mvcBoard.command.BReplyCommand;
 import com.project.mvcBoard.command.BReplyViewCommand;
 import com.project.mvcBoard.command.BWriteCommand;
+import com.project.mvcBoard.util.Constant;
 
 // Controller 역할을 하기위한 어노테이션
 // jsp에서는 uri의 확장자를 통해 servlet mapping으로 요청을 처리했다
@@ -25,7 +28,16 @@ import com.project.mvcBoard.command.BWriteCommand;
 public class BController {
 	
 	BCommand command; // command 객체를 다른 메소드들에서 사용하기 위해 선언만 해둠 
+		
+	// JdbcTemplate로 DB에 접근하기 위한 설정
+	public JdbcTemplate jdbcTemplate; // JdbcTemplate 사용을 위한 변수
 	
+	@Autowired // 해당 어노테이을 하면 원하는 변수에 빈에서 값을 가져와서 자동으로 setter에 값을 넣어준다.
+	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+		Constant.template = this.jdbcTemplate; // Constant의 static 멤버에 bean에서 받아온 jdbcTemplate 객체를 초기화해줌
+	}
+		
 	@RequestMapping("/list")
 	public String list(Model model){
 		System.out.println("BController.list");
