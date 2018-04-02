@@ -2,8 +2,8 @@ package com.project.mvcBoard.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +18,7 @@ import com.project.mvcBoard.command.BModifyCommand;
 import com.project.mvcBoard.command.BReplyCommand;
 import com.project.mvcBoard.command.BReplyViewCommand;
 import com.project.mvcBoard.command.BWriteCommand;
-import com.project.mvcBoard.util.Constant;
+
 
 // Controller 역할을 하기위한 어노테이션
 // jsp에서는 uri의 확장자를 통해 servlet mapping으로 요청을 처리했다
@@ -28,22 +28,17 @@ import com.project.mvcBoard.util.Constant;
 public class BController {
 	
 	BCommand command; // command 객체를 다른 메소드들에서 사용하기 위해 선언만 해둠 
-		
-	// JdbcTemplate로 DB에 접근하기 위한 설정
-	public JdbcTemplate jdbcTemplate; // JdbcTemplate 사용을 위한 변수
 	
-	@Autowired // 해당 어노테이을 하면 원하는 변수에 빈에서 값을 가져와서 자동으로 setter에 값을 넣어준다.
-	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
-		Constant.template = this.jdbcTemplate; // Constant의 static 멤버에 bean에서 받아온 jdbcTemplate 객체를 초기화해줌
-	}
+	// @Autowired를 사용해서 setter 없이 bean 객체를 바로 주입함
+	@Autowired
+	private SqlSession sqlSession;
 		
 	@RequestMapping("/list")
 	public String list(Model model){
 		System.out.println("BController.list");
 		
 		command = new BListCommand(); // 게시물들을 가져오는 커맨드
-		command.execute(model);
+		command.execute(model, sqlSession);
 		
 		return "board/list";
 	}
@@ -63,7 +58,7 @@ public class BController {
 		model.addAttribute("request", request); // 커맨드에서 request객체에 닮긴 값을 처리하기위해 model에 request 객체를 담아줌 
 		
 		command = new BWriteCommand();
-		command.execute(model);
+		command.execute(model, sqlSession);
 		
 		return "redirect:list"; // controller에서 다른 페이지로 다시 갈 때 쓰는 키워드
 	}
@@ -75,7 +70,7 @@ public class BController {
 		model.addAttribute("request", request);
 		
 		command = new BContentCommand();
-		command.execute(model);
+		command.execute(model, sqlSession);
 		
 		return "board/content_view";
 		
@@ -88,7 +83,7 @@ public class BController {
 		model.addAttribute("request", request);
 		
 		command = new BModifyViewCommand();
-		command.execute(model);
+		command.execute(model, sqlSession);
 		
 		return "board/modify_form";
 	}
@@ -100,7 +95,7 @@ public class BController {
 		
 		model.addAttribute("request", request);
 		command = new BModifyCommand();
-		command.execute(model);
+		command.execute(model, sqlSession);
 		
 		return "redirect:list";
 	}
@@ -111,7 +106,7 @@ public class BController {
 		
 		model.addAttribute("request", request);
 		command = new BReplyViewCommand();
-		command.execute(model);
+		command.execute(model, sqlSession);
 		
 		return "board/reply_view";
 	}
@@ -122,7 +117,7 @@ public class BController {
 
 		model.addAttribute("request", request);
 		command = new BReplyCommand();
-		command.execute(model);
+		command.execute(model, sqlSession);
 		
 		return "redirect:list";
 	}
@@ -133,7 +128,7 @@ public class BController {
 		
 		model.addAttribute("request", request);
 		command = new BDeleteCommand();
-		command.execute(model);
+		command.execute(model, sqlSession);
 		
 		return "redirect:list";
 	}

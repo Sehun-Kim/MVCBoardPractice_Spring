@@ -5,6 +5,7 @@
 ###### DB : Oracle 11g
 ###### JSP : 2.3
 ###### Spring : 3.1.1
+###### Mybatis : 3.2.8
 
 ### ver 1.0
 - 게시글 생성
@@ -14,3 +15,6 @@
 
 ### ver 1.1
 - JdbcTemplate 셋팅
+
+### ver 1.2
+- Mybatis 셋팅
