@@ -9,6 +9,10 @@
 <title>List Page</title>
 </head>
 <body>
+
+	<!-- user의 로그인상태를 알려주는 jsp 파일을 include하는 부분 -->
+	<%@include file = "userStatus.jsp" %>
+
 	<table width="500" cellpadding="0" cellspacing="0" border="1">
 		<tr>
 			<td>번호</td>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+	<security:http auto-config="true">
+		<!-- default로 설정된 spring의 로그인 페이지가 아닌 직접 만든 로그인 페이지를 사용 설정 -->
+		<!-- login이 성공하면 board/list url로 이동, 실패하면 loginfail url로 이동 -->
+		<security:form-login default-target-url="/board/list" authentication-failure-url="/loginfail" login-page="/loginForm" />
+		
+		<!-- 로그아웃 요청주소 지정 -->
+		<security:logout logout-success-url="/logoutform" />
+		
+		<!-- /admin/** 이라는 url로 요청이 들어오면 access로 ROLE_ADMIN이 있는지 권한을 검사한다. -->
+		<security:intercept-url pattern="/admin/**" access="ROLE_ADMIN" />
+		<!-- /board/** 이라는 url로 요청이 들어오면 access로 ROLE_USER가 있는지 권한을 검사한다. -->
+		<security:intercept-url pattern="/board/**" access="ROLE_USER" />
+		
+	</security:http>
+
+	<security:authentication-manager>
+		<security:authentication-provider>
+			<security:user-service>
+				
+				<!-- name이 user고 password가 123인 user는 ROLE_USER 권한을 얻는다. -->
+				<security:user name="user" password="123" authorities="ROLE_USER" />
+				
+				<!-- name이 admin이고 password가 123인 user는 ROLE_USER와 ROLE_ADMIN 권한을 얻는다. -->
+				<security:user name="admin" password="123" authorities="ROLE_ADMIN,ROLE_USER" />
+			
+			</security:user-service>
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+
+</beans>
